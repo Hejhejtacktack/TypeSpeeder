@@ -2,6 +2,7 @@ package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ju23.typespeeder.Menu;
 
 import java.util.Scanner;
 
@@ -9,6 +10,8 @@ import java.util.Scanner;
 public class SystemIO implements IOService {
 
     private final Scanner scanner;
+
+    private Menu menu;
 
     @Autowired
     public SystemIO(Scanner scanner) {

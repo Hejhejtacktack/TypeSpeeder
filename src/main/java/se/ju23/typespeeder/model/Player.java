@@ -3,6 +3,7 @@ package se.ju23.typespeeder.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "players")
 public class Player {
 
     @Id

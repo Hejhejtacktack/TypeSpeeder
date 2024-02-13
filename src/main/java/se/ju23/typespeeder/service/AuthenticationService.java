@@ -7,5 +7,6 @@ import se.ju23.typespeeder.model.Player;
 import java.util.Optional;
 
 public interface AuthenticationService {
-    boolean authenticate(String username, String password) throws AuthenticationException;
+    boolean authenticate(String givenUsername, String givenPassword) throws AuthenticationException;
+    Optional<Player> login();
 }

@@ -1,21 +1,24 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.model.Player;
-import se.ju23.typespeeder.model.Username;
 import se.ju23.typespeeder.service.AuthenticationService;
-import se.ju23.typespeeder.service.GameEngine;
 import se.ju23.typespeeder.service.GameService;
 import se.ju23.typespeeder.service.IOService;
 
-@Component
-public class GameController implements CommandLineRunner {
+import java.util.Optional;
 
-    GameService gameService;
-    IOService ioService;
-    AuthenticationService authenticationService;
+@Component
+public class GameController {
+
+
+    private GameService gameService;
+
+    private IOService ioService;
+
+    private AuthenticationService authenticationService;
 
     @Autowired
     public GameController(GameService gameService, IOService ioService, AuthenticationService authenticationService) {
@@ -24,23 +27,20 @@ public class GameController implements CommandLineRunner {
         this.authenticationService = authenticationService;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        Player player = new Player("Riot", new Username("Hejhejtacktack"), "guest");
-        ioService.print(player);
+    public void run(){
+        initialize();
+
+        Optional<Player> player = authenticationService.login();
+        if (player.isPresent()) {
+            gameService.play();
+        } else {
+            ioService.println("Player not present");
+        }
     }
 
     private void initialize(){
-
-    }
-
-    private String mainMenu() {
-        return """
-                Main Menu
-                
-                1. Login
-                2. Create account
-                0. Quit
-                """;
+        ioService.println("\nSpelet går ut på att programmet ska skriva ut en text där slumpmässiga bokstäver\n" +
+                "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
+                "stor/liten bokstav och på så kort tid som möjligt.");
     }
 }
