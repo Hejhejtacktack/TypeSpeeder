@@ -7,11 +7,12 @@ import jakarta.persistence.*;
 public class Player {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "account_name")
     private String accountName;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "username_id", referencedColumnName = "id")
     private Username username;
     @Column(name = "password")
     private String password;
@@ -39,11 +40,8 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", accountName='" + accountName + '\'' +
-                ", username=" + username +
-                ", password='" + password + '\'' +
-                '}';
+        return "Account name: " + accountName +
+                "Username: " + username +
+                "Password: " + password;
     }
 }

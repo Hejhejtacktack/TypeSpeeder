@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.Menu;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Service
@@ -29,8 +30,20 @@ public class SystemIO implements IOService {
     }
 
     @Override
+    public void println(Object object) {
+        System.out.println(object);
+    }
+
+    @Override
     public void println(String string) {
         System.out.println(string);
+    }
+
+    @Override
+    public void printList(List<?> list) {
+        for (Object object : list) {
+            System.out.println(object);
+        }
     }
 
     @Override

@@ -1,14 +1,12 @@
 package se.ju23.typespeeder.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usernames")
 public class Username {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "username")
     private String value;
@@ -34,6 +32,11 @@ public class Username {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
     }
 
     private boolean validate() {

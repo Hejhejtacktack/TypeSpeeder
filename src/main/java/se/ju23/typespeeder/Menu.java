@@ -1,8 +1,11 @@
 package se.ju23.typespeeder;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class Menu implements MenuService {
 
     private String TEXT_COLOR;
@@ -29,6 +32,8 @@ public class Menu implements MenuService {
         list.add("3. Change language (swedish or english)");
         list.add("4. View leaderboard");
         list.add("5. Patch notes");
+        list.add("6. Play");
+        list.add("0. Quit program")
         return list;
     }
 

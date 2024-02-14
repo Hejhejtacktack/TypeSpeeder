@@ -50,11 +50,11 @@ public class AuthenticationEngine implements AuthenticationService {
         ioService.println("\n\tLogin");
 
         ioService.println("Enter username");
-        ioService.print(">");
+        ioService.print("> ");
         String givenUsername = ioService.readString();
 
         ioService.println("Enter password");
-        ioService.print(">");
+        ioService.print("> ");
         String givenPassword = ioService.readString();
 
         try {
