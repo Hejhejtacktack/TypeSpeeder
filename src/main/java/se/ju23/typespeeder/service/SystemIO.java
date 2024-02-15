@@ -30,6 +30,11 @@ public class SystemIO implements IOService {
     }
 
     @Override
+    public void println() {
+        System.out.println();
+    }
+
+    @Override
     public void println(Object object) {
         System.out.println(object);
     }

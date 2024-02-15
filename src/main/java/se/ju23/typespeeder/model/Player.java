@@ -16,14 +16,17 @@ public class Player {
     private Username username;
     @Column(name = "password")
     private String password;
+    @Column(name = "score")
+    private double score;
 
     public Player() {
     }
 
-    public Player(String accountName, Username username, String password) {
+    public Player(String accountName, Username username, String password, double score) {
         this.accountName = accountName;
         this.username = username;
         this.password = password;
+        this.score = score;
     }
 
     public String getAccountName() {
@@ -38,10 +41,14 @@ public class Player {
         return password;
     }
 
+    // TODO update
     @Override
     public String toString() {
-        return "Account name: " + accountName +
-                "Username: " + username +
-                "Password: " + password;
+        return "Player{" +
+                "accountName='" + accountName + '\'' +
+                ", username=" + username +
+                ", password='" + password + '\'' +
+                ", score=" + score +
+                '}';
     }
 }
