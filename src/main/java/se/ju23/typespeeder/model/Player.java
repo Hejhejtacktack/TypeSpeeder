@@ -18,6 +18,8 @@ public class Player {
     private String password;
     @Column(name = "score")
     private double score;
+    @Column(name = "level")
+    private int level;
 
     public Player() {
     }

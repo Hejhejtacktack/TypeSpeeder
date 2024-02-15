@@ -16,11 +16,18 @@ public class LeaderboardView {
     @Column(name = "score")
     private double score;
 
+    @Column(name = "level")
+    private int level;
+
     public String getAccountName() {
         return accountName;
     }
 
     public double getScore() {
         return score;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

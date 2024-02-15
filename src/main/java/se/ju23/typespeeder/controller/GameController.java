@@ -59,10 +59,10 @@ public class GameController {
                         ioService.println(aE);
                     }
                 }
-                    case "3" -> this.displayLeaderboard();
-//                    case "4" -> { PATCH NOTES }
-//                    case "5" -> { PLAY }
-                    case "0" -> this.quit();
+                case "3" -> this.displayLeaderboard();
+//              case "4" -> { PATCH NOTES }
+//              case "5" -> { PLAY }
+                case "0" -> this.quit();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
         } while (run);
@@ -80,10 +80,12 @@ public class GameController {
         List<LeaderboardView> leaderboard = this.leaderBoardService.getLeaderboard();
 
         if (!leaderboard.isEmpty()) {
-            this.ioService.println("\n\tLEADERBOARD");
+            this.ioService.println("\n\t\tLEADERBOARD");
+            this.ioService.println(String.format("%-17s%-17s%-17s", "Account name", "Score", "Level"));
 
             for (LeaderboardView entry : leaderboard) {
-                this.ioService.println(String.format("%-16s %.2f", entry.getAccountName(), entry.getScore()));
+                this.ioService.println(String.format("%-16s %-16.2f %-16d",
+                        entry.getAccountName(), entry.getScore(), entry.getLevel()));
             }
             this.ioService.println();
         } else {
@@ -92,7 +94,7 @@ public class GameController {
     }
 
     private void quit(){
-        this.ioService.println("\nExiting program. Thanks for playing!");
+        this.ioService.println("\nExiting program. Thank you for playing!");
         System.exit(0);
     }
 }
