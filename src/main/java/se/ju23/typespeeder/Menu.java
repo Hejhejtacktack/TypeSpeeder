@@ -29,11 +29,11 @@ public class Menu implements MenuService {
         List<String> list = new ArrayList<>();
         list.add("1. Login");
         list.add("2. Change user information (account name, username and password");
-        list.add("3. Change language (swedish or english)");
-        list.add("4. View leaderboard");
-        list.add("5. Patch notes");
-        list.add("6. Play");
-        list.add("0. Quit program")
+        list.add("3. View leaderboard");
+        list.add("4. Patch notes");
+        list.add("5. Play");
+        list.add("0. Quit program");
+        list.add("> ");
         return list;
     }
 

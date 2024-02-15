@@ -14,13 +14,17 @@ import java.util.Optional;
 @Service
 public class AuthenticationEngine implements AuthenticationService {
 
-    @Autowired
     private PlayerRepository playerRepo;
-    @Autowired
     private UsernameRepository usernameRepo;
+    private final UserInterfaceService uiService;
+
     private final IOService ioService;
 
-    public AuthenticationEngine(IOService ioService) {
+    @Autowired
+    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UserInterfaceService uiService, IOService ioService) {
+        this.playerRepo = playerRepo;
+        this.usernameRepo = usernameRepo;
+        this.uiService = uiService;
         this.ioService = ioService;
     }
 
@@ -49,13 +53,13 @@ public class AuthenticationEngine implements AuthenticationService {
     public Optional<Player> login() {
         ioService.println("\n\tLogin");
 
-        ioService.println("Enter username");
-        ioService.print("> ");
-        String givenUsername = ioService.readString();
+        String givenUsername = this.uiService.promptForInput("""
+                Enter username
+                >\s""");
 
-        ioService.println("Enter password");
-        ioService.print("> ");
-        String givenPassword = ioService.readString();
+        String givenPassword = this.uiService.promptForInput("""
+                Enter password
+                >\s""");
 
         try {
             boolean authenticated = authenticate(givenUsername, givenPassword);
@@ -64,7 +68,7 @@ public class AuthenticationEngine implements AuthenticationService {
                 return playerRepo.findByUsername(username.get());
             }
         } catch (AuthenticationException e) {
-
+            // TODO handle
         }
         return Optional.empty();
     }
