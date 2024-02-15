@@ -64,4 +64,9 @@ public class GameController {
                 "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
                 "stor/liten bokstav och på så kort tid som möjligt.");
     }
+
+    private void quit(){
+        this.ioService.println("\nExiting program. Thanks for playing!");
+        System.exit(0);
+    }
 }
