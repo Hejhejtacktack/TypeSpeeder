@@ -1,15 +1,18 @@
 # TypeSpeeder
 
-This is a test description.
+The warnings are written in english and make sure that you read the warnings carefully.
 
-THIS IS ANOTHER TEST DESCRIPTION.
+## Update 1 of 3
+One file is now added to the project:
+
+* MenuTest.java
 
 
 
+## Update 2 of 3
+Three files are now added to the project:
 
-This is a test description.
-THIS IS ANOTHER TEST DESCRIPTION.
-This is a test description.
-THIS IS ANOTHER TEST DESCRIPTION.
-This is a test description.
-THIS IS ANOTHER TEST DESCRIPTION.
+* ChallengePerformanceTest.java
+* ChallengeTest.java
+* MenuPerformanceTest.java
+
