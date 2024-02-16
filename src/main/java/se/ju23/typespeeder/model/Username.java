@@ -1,6 +1,7 @@
 package se.ju23.typespeeder.model;
 
 import jakarta.persistence.*;
+import se.ju23.typespeeder.exception.ValidationException;
 
 @Entity
 @Table(name = "usernames")
@@ -14,7 +15,8 @@ public class Username {
     public Username() {
     }
 
-    public Username(String value) {
+    public Username(String value) throws ValidationException {
+        validate(value);
         this.value = value;
     }
 
@@ -39,7 +41,9 @@ public class Username {
         return this.value;
     }
 
-    private boolean validate() {
-        return true;
+    private void validate(String input) throws ValidationException {
+        if (input == null || input.isEmpty() || !input.matches("[a-zA-z-1-9]+")) {
+            throw new ValidationException("Error: in Username creation.");
+        }
     }
 }

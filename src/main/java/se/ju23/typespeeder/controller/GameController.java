@@ -1,9 +1,7 @@
 package se.ju23.typespeeder.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import se.ju23.typespeeder.AuthenticationException;
+import se.ju23.typespeeder.exception.AuthenticationException;
 import se.ju23.typespeeder.MenuService;
 import se.ju23.typespeeder.model.LeaderboardView;
 import se.ju23.typespeeder.model.Player;
@@ -21,6 +19,7 @@ public class GameController {
     private AuthenticationService authenticationService;
     private PlayerService playerService;
     private UserInterfaceService uiService;
+    private AccountService accountService;
 
     private LeaderBoardService leaderBoardService;
 
@@ -32,6 +31,7 @@ public class GameController {
                           AuthenticationService authenticationService,
                           PlayerService playerService,
                           UserInterfaceService uiService,
+                          AccountService accountService,
                           LeaderBoardService leaderBoardService) {
         this.gameService = gameService;
         this.ioService = ioService;
@@ -39,6 +39,7 @@ public class GameController {
         this.authenticationService = authenticationService;
         this.playerService = playerService;
         this.uiService = uiService;
+        this.accountService = accountService;
         this.leaderBoardService = leaderBoardService;
     }
 
@@ -52,22 +53,21 @@ public class GameController {
 
             switch (choice) {
                 case "1" -> this.authenticationService.login();
-                case "2" -> {
+                case "2" -> this.accountService.create();
+                case "3" -> {
                     try {
                         this.playerService.changePlayerInfo(this.currentPlayer);
                     } catch (AuthenticationException aE) {
                         ioService.println(aE);
                     }
                 }
-                case "3" -> this.displayLeaderboard();
-//              case "4" -> { PATCH NOTES }
-//              case "5" -> { PLAY }
+                case "4" -> this.displayLeaderboard();
+//              case "5" -> { PATCH NOTES }
+//              case "6" -> { PLAY }
                 case "0" -> this.quit();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
         } while (run);
-
-
     }
 
     private void initialize() {

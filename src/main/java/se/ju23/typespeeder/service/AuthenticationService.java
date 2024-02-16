@@ -1,7 +1,6 @@
 package se.ju23.typespeeder.service;
 
-import org.springframework.stereotype.Service;
-import se.ju23.typespeeder.AuthenticationException;
+import se.ju23.typespeeder.exception.AuthenticationException;
 import se.ju23.typespeeder.model.Player;
 
 import java.util.Optional;

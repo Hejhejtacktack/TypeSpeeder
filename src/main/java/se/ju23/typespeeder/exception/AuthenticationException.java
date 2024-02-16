@@ -1,4 +1,4 @@
-package se.ju23.typespeeder;
+package se.ju23.typespeeder.exception;
 
 public class AuthenticationException extends NullPointerException {
     public AuthenticationException() {
