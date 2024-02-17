@@ -53,7 +53,7 @@ public class GameController {
 
             switch (choice) {
                 case "1" -> this.authenticationService.login();
-                case "2" -> this.accountService.create();
+//                case "2" -> this.accountService.create();
                 case "3" -> {
                     try {
                         this.playerService.changePlayerInfo(this.currentPlayer);
