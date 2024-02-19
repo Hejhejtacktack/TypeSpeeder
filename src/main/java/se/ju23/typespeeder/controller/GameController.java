@@ -52,24 +52,12 @@ public class GameController {
             String choice = this.uiService.promptForInput(this.menuService.getMenuOptions());
 
             switch (choice) {
-                case "1" -> this.authenticationService.login();
-                case "2" -> {
-                    try {
-                        this.createAccount();
-                    } catch (AccountCreationException aCE) {
-                        ioService.println(aCE);
-                    }
-                }
-                case "3" -> {
-                    try {
-                        this.playerService.changePlayerInfo(this.currentPlayer);
-                    } catch (AuthenticationException aE) {
-                        ioService.println(aE);
-                    }
-                }
+                case "1" -> this.login();
+                case "2" -> this.createAccount();
+                case "3" -> this.changePlayer();
                 case "4" -> this.displayLeaderboard();
-//              case "5" -> { PATCH NOTES }
-//              case "6" -> { PLAY }
+                case "5" -> this.displayNewsLetter();
+                case "6" -> this.play();
                 case "0" -> this.quit();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
@@ -82,8 +70,24 @@ public class GameController {
                 "stor/liten bokstav och på så kort tid som möjligt.");
     }
 
-    private void createAccount() throws AccountCreationException {
-        this.accountService.build();
+    private void login() {
+        this.authenticationService.login();
+    }
+
+    private void createAccount() {
+        try {
+            this.accountService.build();
+        } catch (AccountCreationException aCE) {
+            this.ioService.println(aCE);
+        }
+    }
+
+    private void changePlayer() {
+        try {
+            this.playerService.changePlayerInfo(this.currentPlayer);
+        } catch (AuthenticationException aE) {
+            ioService.println(aE);
+        }
     }
 
     private void displayLeaderboard() {
@@ -101,6 +105,14 @@ public class GameController {
         } else {
             ioService.println("\nLeaderboard is empty.");
         }
+    }
+
+    private void displayNewsLetter() {
+
+    }
+
+    private void play() {
+
     }
 
     private void quit() {

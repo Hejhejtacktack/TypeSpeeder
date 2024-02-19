@@ -27,4 +27,9 @@ public class NewsLetter {
     public LocalDateTime getPublishDateTime() {
         return publishDateTime;
     }
+
+    @Override
+    public String toString() {
+        return "\t\t" + publishDateTime + "\n" + content;
+    }
 }
