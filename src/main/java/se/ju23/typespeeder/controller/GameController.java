@@ -1,6 +1,7 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
+import se.ju23.typespeeder.exception.AccountCreationException;
 import se.ju23.typespeeder.exception.AuthenticationException;
 import se.ju23.typespeeder.MenuService;
 import se.ju23.typespeeder.model.LeaderboardView;
@@ -18,9 +19,8 @@ public class GameController {
     private MenuService menuService;
     private AuthenticationService authenticationService;
     private PlayerService playerService;
-    private UserInterfaceService uiService;
+    private UIService uiService;
     private AccountService accountService;
-
     private LeaderBoardService leaderBoardService;
 
     private final Optional<Player> currentPlayer = Optional.empty();
@@ -30,7 +30,7 @@ public class GameController {
                           MenuService menuService,
                           AuthenticationService authenticationService,
                           PlayerService playerService,
-                          UserInterfaceService uiService,
+                          UIService uiService,
                           AccountService accountService,
                           LeaderBoardService leaderBoardService) {
         this.gameService = gameService;
@@ -53,7 +53,13 @@ public class GameController {
 
             switch (choice) {
                 case "1" -> this.authenticationService.login();
-//                case "2" -> this.accountService.create();
+                case "2" -> {
+                    try {
+                        this.createAccount();
+                    } catch (AccountCreationException aCE) {
+                        ioService.println(aCE);
+                    }
+                }
                 case "3" -> {
                     try {
                         this.playerService.changePlayerInfo(this.currentPlayer);
@@ -76,6 +82,10 @@ public class GameController {
                 "stor/liten bokstav och på så kort tid som möjligt.");
     }
 
+    private void createAccount() throws AccountCreationException {
+        this.accountService.build();
+    }
+
     private void displayLeaderboard() {
         List<LeaderboardView> leaderboard = this.leaderBoardService.getLeaderboard();
 
@@ -93,7 +103,7 @@ public class GameController {
         }
     }
 
-    private void quit(){
+    private void quit() {
         this.ioService.println("\nExiting program. Thank you for playing!");
         System.exit(0);
     }

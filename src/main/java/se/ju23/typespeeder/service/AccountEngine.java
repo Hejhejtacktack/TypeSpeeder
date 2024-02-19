@@ -14,29 +14,46 @@ public class AccountEngine implements AccountService {
 
     PlayerRepository playerRepo;
     UsernameRepository usernameRepo;
+    UIService uiService;
 
     @Autowired
-    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo) {
+    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
+        this.uiService = uiService;
     }
 
     @Override
-    public void create(String givenAccountName, String givenUsername, String givenPassword) throws AccountCreationException {
+    public void build() throws AccountCreationException {
+        String desiredAccountName = this.uiService.promptForInput("""
+                Enter desired account name
+                >\s""");
+        String desiredUsername = this.uiService.promptForInput("""
+                Enter desired username
+                >\s""");
+        String desiredPassword = this.uiService.promptForInput("""
+                Enter desired password
+                >\s""");
+
+        this.create(desiredAccountName, desiredUsername, desiredPassword);
+    }
+
+    @Override
+    public void create(String desiredAccountName, String desiredUsername, String desiredPassword) throws AccountCreationException {
         // Validate input parameters, e.g., check for empty or null values
 
         // Check if the username is already taken
-        if (usernameRepo.existsByValue(givenUsername)) {
+        if (usernameRepo.existsByValue(desiredUsername)) {
             throw new AccountCreationException("Error: Username is already taken.");
         }
 
         // Perform additional validation if needed
 
         // Create a new player with the provided information
-        Player player = null;
+        Player player;
         try {
-            Username username = new Username(givenPassword);
-            player = new Player(givenAccountName, username, givenPassword);
+            Username username = new Username(desiredPassword);
+            player = new Player(desiredAccountName, username, desiredPassword);
         } catch (ValidationException vE) {
             throw new AccountCreationException("Error: in Account creation: " + vE);
         }

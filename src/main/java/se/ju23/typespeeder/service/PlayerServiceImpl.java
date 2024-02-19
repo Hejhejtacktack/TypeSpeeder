@@ -12,12 +12,12 @@ import java.util.Optional;
 public class PlayerServiceImpl implements PlayerService {
 
     PlayerRepository playerRepository;
-    UserInterfaceService userInterfaceService;
+    UIService UIEngine;
 
     @Autowired
-    public PlayerServiceImpl(PlayerRepository playerRepository, UserInterfaceService userInterfaceService) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, UIService UIEngine) {
         this.playerRepository = playerRepository;
-        this.userInterfaceService = userInterfaceService;
+        this.UIEngine = UIEngine;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class PlayerServiceImpl implements PlayerService {
             throw new AuthenticationException("Error: Please login first.");
         }
 
-        String choice = userInterfaceService.promptForInput("""
+        String choice = UIEngine.promptForInput("""
                 
                 What do you want to do?
                 1. Change Account name

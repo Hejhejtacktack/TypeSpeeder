@@ -34,9 +34,9 @@ public class Menu implements MenuService {
         list.add("3. Change player information");
         list.add("4. View leaderboard");
         list.add("5. Patch notes");
-        list.add("6. Play");
+        list.add("6. Change language");
+        list.add("7. Play");
         list.add("0. Quit program");
-        list.add("> ");
         return list;
     }
 

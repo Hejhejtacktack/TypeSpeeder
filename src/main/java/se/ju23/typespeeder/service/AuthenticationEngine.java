@@ -15,12 +15,12 @@ public class AuthenticationEngine implements AuthenticationService {
 
     private PlayerRepository playerRepo;
     private UsernameRepository usernameRepo;
-    private final UserInterfaceService uiService;
+    private final UIEngine uiService;
 
     private final IOService ioService;
 
     @Autowired
-    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UserInterfaceService uiService, IOService ioService) {
+    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIEngine uiService, IOService ioService) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
