@@ -1,13 +1,15 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
+import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
 import se.ju23.typespeeder.exception.AuthenticationException;
-import se.ju23.typespeeder.MenuService;
+import se.ju23.typespeeder.service.MenuService;
 import se.ju23.typespeeder.model.LeaderboardView;
 import se.ju23.typespeeder.model.Player;
 import se.ju23.typespeeder.service.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,17 +24,11 @@ public class GameController {
     private UIService uiService;
     private AccountService accountService;
     private LeaderBoardService leaderBoardService;
+    private NewsLetterService newsLetterService;
 
     private final Optional<Player> currentPlayer = Optional.empty();
 
-    public GameController(GameService gameService,
-                          IOService ioService,
-                          MenuService menuService,
-                          AuthenticationService authenticationService,
-                          PlayerService playerService,
-                          UIService uiService,
-                          AccountService accountService,
-                          LeaderBoardService leaderBoardService) {
+    public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService) {
         this.gameService = gameService;
         this.ioService = ioService;
         this.menuService = menuService;
@@ -41,6 +37,7 @@ public class GameController {
         this.uiService = uiService;
         this.accountService = accountService;
         this.leaderBoardService = leaderBoardService;
+        this.newsLetterService = newsLetterService;
     }
 
     public void run(){
@@ -108,7 +105,12 @@ public class GameController {
     }
 
     private void displayNewsLetter() {
-
+        Optional<NewsLetter> newsLetter = this.newsLetterService.getLatestNewsLetter();
+        if (newsLetter.isPresent()) {
+            this.ioService.print(newsLetter.get().toString());
+        } else {
+            this.ioService.println("No newsletter found!");
+        }
     }
 
     private void play() {

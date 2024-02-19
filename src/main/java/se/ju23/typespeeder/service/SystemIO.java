@@ -2,7 +2,6 @@ package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ju23.typespeeder.Menu;
 
 import java.util.List;
 import java.util.Scanner;

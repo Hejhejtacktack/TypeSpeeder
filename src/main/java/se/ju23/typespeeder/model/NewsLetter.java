@@ -1,11 +1,20 @@
-package se.ju23.typespeeder;
+package se.ju23.typespeeder.model;
+
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+@Entity
+@Table(name = "news_letters")
 public class NewsLetter {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @Column(name = "publish_date_time")
     public LocalDateTime publishDateTime;
+    @Column(name = "content")
     public String content;
 
     public NewsLetter() {
@@ -15,7 +24,7 @@ public class NewsLetter {
     }
 
     public NewsLetter(LocalDateTime publishDateTime, String content) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         this.publishDateTime = publishDateTime;
         this.content = content;
     }
@@ -31,5 +40,13 @@ public class NewsLetter {
     @Override
     public String toString() {
         return "\t\t" + publishDateTime + "\n" + content;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
