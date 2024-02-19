@@ -114,7 +114,7 @@ public class GameController {
     }
 
     private void play() {
-
+        this.gameService.play();
     }
 
     private void quit() {
