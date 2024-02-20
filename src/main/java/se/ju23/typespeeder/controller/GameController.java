@@ -148,6 +148,7 @@ public class GameController {
             }
         } while (run);
 //        this.updatePlayerStats();
+//        Hej hopp
     }
 
     private void quit() {
