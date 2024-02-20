@@ -14,7 +14,9 @@ public class Challenge {
     private CharacterGenerator characterGenerator;
     private SymbolGenerator symbolGenerator;
     private String correctInput;
-    private double timeSpent;
+    private double duration;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 
     public Challenge(String mode, String difficulty) throws ChallengeException {
         switch (mode) {
@@ -32,18 +34,24 @@ public class Challenge {
         return correctInput;
     }
 
-    public double getTimeSpent() {
-        return timeSpent;
+    public double getDuration() {
+        return duration;
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
     public String startChallenge() {
-        LocalDateTime startTime = LocalDateTime.now();
+        this.startTime = LocalDateTime.now();
         this.correctInput = this.lettersToType();
-        LocalDateTime endTime = LocalDateTime.now();
-
-        this.timeSpent = Duration.between(startTime, endTime).toMillis() * 1000.0;
 
         return this.correctInput;
+    }
+
+    public void endChallenge() {
+        this.endTime = LocalDateTime.now();
+        this.duration = Duration.between(this.startTime, this.endTime).toMillis() / 1000.0;
     }
 
     public String lettersToType() {

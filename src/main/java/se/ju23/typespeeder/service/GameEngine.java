@@ -4,13 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.exception.ChallengeException;
 import se.ju23.typespeeder.exception.PlayException;
-import se.ju23.typespeeder.generator.CharacterGenerator;
-import se.ju23.typespeeder.generator.SentenceGenerator;
-import se.ju23.typespeeder.generator.SymbolGenerator;
 import se.ju23.typespeeder.model.Challenge;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 @Service
 public class GameEngine implements GameService {
@@ -36,24 +30,28 @@ public class GameEngine implements GameService {
 
         this.uiService.promptForInput("""
                 
-                You are to type the given characters/symbols/sentence
+                You are to type the given characters on the screen
                 Every correct character gives points
                 The faster the better
-                Press enter to start...""");
+                Press enter to start...
+                """);
 
-        String userInput = this.uiService.promptForInput("\n" + challenge.startChallenge() + "\n> ");
+        String userInput = this.uiService.promptForInput(challenge.startChallenge() + "\n> ").trim();
+        this.challenge.endChallenge();
+
         String correctInput = this.challenge.getCorrectInput();
 
         this.uiService.promptForInput(
                 "Correct characters: " + this.getNumOfCorrectChars(userInput, correctInput) + "\n" +
-                "Time spent: " + this.challenge.getTimeSpent() + "\n\n" +
+                "Time spent: " + this.challenge.getDuration() + "\n" +
                 "Press enter to continue...");
 
         return calculateScore(userInput, correctInput);
     }
 
     private double calculateScore(String userInput, String correctInput) {
-        return (getNumOfCorrectChars(userInput, correctInput) * 10) / getChallengeDuration();
+        double score =  (getNumOfCorrectChars(userInput, correctInput) * 10) / getChallengeDuration();
+        return Math.floor(score * 100) / 100;
     }
 
     private int getNumOfCorrectChars(String userInput, String correctInput) {
@@ -70,6 +68,6 @@ public class GameEngine implements GameService {
     }
 
     private double getChallengeDuration() {
-        return this.challenge.getTimeSpent();
+        return this.challenge.getDuration();
     }
 }
