@@ -3,6 +3,7 @@ package se.ju23.typespeeder.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.exception.AuthenticationException;
+import se.ju23.typespeeder.exception.ValidationException;
 import se.ju23.typespeeder.model.Player;
 import se.ju23.typespeeder.model.Username;
 import se.ju23.typespeeder.repository.PlayerRepository;
@@ -15,16 +16,24 @@ public class AuthenticationEngine implements AuthenticationService {
 
     private PlayerRepository playerRepo;
     private UsernameRepository usernameRepo;
-    private final UIEngine uiService;
-
+    private final UIService uiService;
     private final IOService ioService;
+    private Optional<Player> currentPlayer = Optional.empty();
 
     @Autowired
-    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIEngine uiService, IOService ioService) {
+    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, IOService ioService) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
         this.ioService = ioService;
+    }
+
+    public void setCurrentPlayer(Optional<Player> currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Optional<Player> getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
@@ -49,6 +58,13 @@ public class AuthenticationEngine implements AuthenticationService {
     }
 
     @Override
+    public void validate(String string) throws ValidationException {
+        if (usernameRepo.existsByValue(string)) {
+            throw new ValidationException("Username is taken");
+        }
+    }
+
+    @Override
     public Optional<Player> login() {
         ioService.println("\n\tLogin");
 
@@ -64,11 +80,25 @@ public class AuthenticationEngine implements AuthenticationService {
             boolean authenticated = authenticate(givenUsername, givenPassword);
             if (authenticated) {
                 Optional<Username> username = this.usernameRepo.findByValue(givenUsername);
-                return playerRepo.findByUsername(username.get());
+                Optional<Player> player = playerRepo.findByUsername(username.get());
+                setCurrentPlayer(player);
+                this.ioService.println("\nLogin successful");
+                return player;
             }
-        } catch (AuthenticationException e) {
-            // TODO handle
+        } catch (AuthenticationException aE) {
+            this.ioService.println(aE);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void isLoggedIn() throws AuthenticationException {
+        if (this.currentPlayer.isEmpty()) {
+            throw new AuthenticationException("Please login first");
+        }
+    }
+
+    public void logout() {
+        this.currentPlayer = Optional.empty();
     }
 }

@@ -50,7 +50,7 @@ public class GameEngine implements GameService {
     }
 
     private double calculateScore(String userInput, String correctInput) {
-        double score =  (getNumOfCorrectChars(userInput, correctInput) * 10) / getChallengeDuration();
+        double score = (getNumOfCorrectChars(userInput, correctInput) * 10) / getChallengeDuration();
         return Math.floor(score * 100) / 100;
     }
 

@@ -1,7 +1,6 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
-import se.ju23.typespeeder.exception.ChallengeException;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
@@ -11,7 +10,6 @@ import se.ju23.typespeeder.model.LeaderboardView;
 import se.ju23.typespeeder.model.Player;
 import se.ju23.typespeeder.service.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +25,6 @@ public class GameController {
     private AccountService accountService;
     private LeaderBoardService leaderBoardService;
     private NewsLetterService newsLetterService;
-
-    private final Optional<Player> currentPlayer = Optional.empty();
 
     public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService) {
         this.gameService = gameService;
@@ -53,7 +49,7 @@ public class GameController {
             switch (choice) {
                 case "1" -> this.login();
                 case "2" -> this.createAccount();
-                case "3" -> this.changePlayer();
+                case "3" -> this.changePlayerInfo();
                 case "4" -> this.displayLeaderboard();
                 case "5" -> this.displayNewsLetter();
                 case "6" -> this.changeLanguage();
@@ -68,6 +64,8 @@ public class GameController {
         ioService.println("\nSpelet går ut på att programmet ska skriva ut en text där slumpmässiga bokstäver\n" +
                 "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
                 "stor/liten bokstav och på så kort tid som möjligt.");
+
+        //this.accountService.remove("hej");
     }
 
     private void login() {
@@ -80,13 +78,16 @@ public class GameController {
         } catch (AccountCreationException aCE) {
             this.ioService.println(aCE);
         }
+
+        this.ioService.println("\nAccount was successfully created");
     }
 
-    private void changePlayer() {
+    private void changePlayerInfo() {
         try {
-            this.playerService.changePlayerInfo(this.currentPlayer);
+            this.authenticationService.isLoggedIn();
+            this.playerService.changePlayerInfo(this.authenticationService.getCurrentPlayer());
         } catch (AuthenticationException aE) {
-            ioService.println(aE);
+            this.ioService.println(aE);
         }
     }
 
@@ -121,6 +122,13 @@ public class GameController {
     }
 
     private void play() {
+        try {
+            this.authenticationService.isLoggedIn();
+        } catch (AuthenticationException aE) {
+            this.ioService.println(aE);
+            return;
+        }
+
         boolean run = true;
         double score = 0;
 

@@ -2,6 +2,7 @@ package se.ju23.typespeeder.model;
 
 import se.ju23.typespeeder.exception.ChallengeException;
 import se.ju23.typespeeder.generator.CharacterGenerator;
+import se.ju23.typespeeder.generator.Generator;
 import se.ju23.typespeeder.generator.SentenceGenerator;
 import se.ju23.typespeeder.generator.SymbolGenerator;
 
@@ -10,9 +11,10 @@ import java.time.LocalDateTime;
 
 public class Challenge {
 
-    private SentenceGenerator sentenceGenerator;
-    private CharacterGenerator characterGenerator;
-    private SymbolGenerator symbolGenerator;
+    Generator generator;
+//    private SentenceGenerator sentenceGenerator;
+//    private CharacterGenerator characterGenerator;
+//    private SymbolGenerator symbolGenerator;
     private String correctInput;
     private double duration;
     private LocalDateTime startTime;
@@ -20,10 +22,10 @@ public class Challenge {
 
     public Challenge(String mode, String difficulty) throws ChallengeException {
         switch (mode) {
-            case "1" -> this.sentenceGenerator = new SentenceGenerator(difficulty);
-            case "2" -> this.characterGenerator = new CharacterGenerator(difficulty);
-            case "3" -> this.symbolGenerator = new SymbolGenerator(difficulty);
-            default -> throw new ChallengeException("Error in Challenge: Mode must be Sentence, Character or Symbol");
+            case "1" -> this.generator = new SentenceGenerator(difficulty);
+            case "2" -> this.generator = new CharacterGenerator(difficulty);
+            case "3" -> this.generator = new SymbolGenerator(difficulty);
+            default -> throw new ChallengeException("Mode must be Sentence, Character or Symbol");
         }
     }
 
@@ -55,6 +57,6 @@ public class Challenge {
     }
 
     public String lettersToType() {
-        return this.sentenceGenerator.generate();
+        return this.generator.generate();
     }
 }

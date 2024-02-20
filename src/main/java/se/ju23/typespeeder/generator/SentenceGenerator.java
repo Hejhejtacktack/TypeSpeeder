@@ -5,7 +5,7 @@ import se.ju23.typespeeder.exception.ChallengeException;
 import java.util.List;
 import java.util.Random;
 
-public class SentenceGenerator {
+public class SentenceGenerator implements Generator {
 
     String difficulty;
     List<String> subjects = List.of("A cat", "A dog", "A bear", "A sheep", "A squirrel", "A lion", "An elephant");
@@ -21,6 +21,7 @@ public class SentenceGenerator {
         }
     }
 
+    @Override
     public String generate() {
         StringBuilder sentence = new StringBuilder();
 
@@ -32,7 +33,7 @@ public class SentenceGenerator {
         sentence.append(subject).append(" ");
         sentence.append(verb).append(" ");
         sentence.append(object).append(" ");
-        sentence.append(adverbial).append(" ");
+        sentence.append(adverbial);
 
         switch (this.difficulty) {
             case "1" -> {
