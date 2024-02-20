@@ -5,6 +5,11 @@ public class ValidationException extends Exception {
     }
 
     public ValidationException(String message) {
-        super("\n" + message + "\n");
+        super(message);
+    }
+
+    @Override
+    public String toString() {
+        return "ValidationException: " + getMessage();
     }
 }

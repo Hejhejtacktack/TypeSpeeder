@@ -5,7 +5,11 @@ public class AccountCreationException extends Exception {
     }
 
     public AccountCreationException(String message) {
-        super("\n" + message + "\n");
+        super(message);
     }
 
+    @Override
+    public String toString() {
+        return "AccountCreationException: " + getMessage();
+    }
 }

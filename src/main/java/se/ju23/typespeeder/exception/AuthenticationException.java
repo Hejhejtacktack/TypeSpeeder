@@ -5,6 +5,11 @@ public class AuthenticationException extends NullPointerException {
     }
 
     public AuthenticationException(String message) {
-        super("\n" + message + "\n");
+        super(message);
+    }
+
+    @Override
+    public String toString() {
+        return "AuthenticationException: " + getMessage();
     }
 }

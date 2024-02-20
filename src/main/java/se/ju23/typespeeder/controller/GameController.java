@@ -1,6 +1,8 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
+import se.ju23.typespeeder.exception.ChallengeException;
+import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
 import se.ju23.typespeeder.exception.AuthenticationException;
@@ -54,7 +56,8 @@ public class GameController {
                 case "3" -> this.changePlayer();
                 case "4" -> this.displayLeaderboard();
                 case "5" -> this.displayNewsLetter();
-                case "6" -> this.play();
+                case "6" -> this.changeLanguage();
+                case "7" -> this.play();
                 case "0" -> this.quit();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
@@ -113,8 +116,38 @@ public class GameController {
         }
     }
 
+    private void changeLanguage() {
+
+    }
+
     private void play() {
-        this.gameService.play();
+        boolean run = true;
+
+        do {
+            String mode = this.uiService.promptForInput("""
+                    \nDo you want to play
+                    1. Write sentences
+                    2. Write characters
+                    3. Write symbols
+                    >\s""")
+                    .trim();
+
+            String difficulty = this.uiService.promptForInput("""
+                    Which difficulty do you want?
+                    1. Easy
+                    2. Medium
+                    3. Hard
+                    >\s""")
+                    .trim();
+
+            try {
+                this.gameService.play(mode, difficulty);
+                run = false;
+            } catch (PlayException pE) {
+                this.ioService.print(pE);
+            }
+        } while (run);
+//        this.updatePlayerStats();
     }
 
     private void quit() {
