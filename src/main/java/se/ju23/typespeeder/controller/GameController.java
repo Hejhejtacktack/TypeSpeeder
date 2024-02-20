@@ -122,37 +122,56 @@ public class GameController {
 
     private void play() {
         boolean run = true;
+        double score = 0;
 
         do {
             String mode = this.uiService.promptForInput("""
-                    \nDo you want to play
-                    1. Write sentences
-                    2. Write characters
-                    3. Write symbols
-                    >\s""")
+                            \nDo you want to play
+                            1. Write sentences
+                            2. Write characters
+                            3. Write symbols
+                            >\s""")
                     .trim();
 
             String difficulty = this.uiService.promptForInput("""
-                    Which difficulty do you want?
-                    1. Easy
-                    2. Medium
-                    3. Hard
-                    >\s""")
+                            Which difficulty do you want?
+                            1. Easy
+                            2. Medium
+                            3. Hard
+                            >\s""")
                     .trim();
 
             try {
-                this.gameService.play(mode, difficulty);
+                score = this.gameService.play(mode, difficulty);
                 run = false;
             } catch (PlayException pE) {
                 this.ioService.print(pE);
             }
         } while (run);
-//        this.updatePlayerStats();
-//        Hej hopp
+
+        this.ioService.println("Good job!\n" +
+                "This challenge score was: " + score);
+
+        this.updateScore(score);
     }
 
     private void quit() {
         this.ioService.println("\nExiting program. Thank you for playing!");
         System.exit(0);
+    }
+
+    private void updateScore(double score) {
+        this.ioService.print("\nUpdating score... ");
+
+        // TODO replace with actual
+        this.ioService.println(score);
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.ioService.println("Done!");
     }
 }
