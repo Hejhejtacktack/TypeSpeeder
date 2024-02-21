@@ -42,21 +42,37 @@ public class GameController {
 
     public void run(){
         boolean run = true;
+        boolean loggedIn = false;
 
         initialize();
 
         do {
-            String choice = this.uiService.promptForInput(this.menuService.getMenuOptions());
+            this.ioService.println("\n\tStart menu");
+            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.startMenu()));
+            String choice = this.uiService.promptForInput("> ");
 
             switch (choice) {
-                case "1" -> this.login();
+                case "1" -> loggedIn = this.login();
                 case "2" -> this.createAccount();
-                case "3" -> this.changePlayerInfo();
-                case "4" -> this.displayLeaderboard();
-                case "5" -> this.displayNewsLetter();
-                case "6" -> this.changeLanguage();
-                case "7" -> this.play();
+                case "3" -> this.changeLanguage();
+                case "4" -> this.displayNewsLetter();
                 case "0" -> this.quit();
+                default -> this.ioService.println("Error: Please enter a menu option");
+            }
+        } while (!loggedIn);
+
+        do {
+            this.ioService.println("\n\tMain menu");
+            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
+            String choice = this.uiService.promptForInput("> ");
+
+            switch (choice) {
+                case "7" -> this.play();
+                case "4" -> this.displayLeaderboard();
+                case "3" -> this.changePlayerInfo();
+                case "5" -> this.displayNewsLetter();
+                // TODO logout
+                case "0" -> this.logout();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
         } while (run);
@@ -66,12 +82,16 @@ public class GameController {
         ioService.println("\nSpelet går ut på att programmet ska skriva ut en text där slumpmässiga bokstäver\n" +
                 "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
                 "stor/liten bokstav och på så kort tid som möjligt.");
-
-        //this.accountService.remove("hej");
     }
 
-    private void login() {
-        this.authenticationService.login();
+    private boolean login() {
+        boolean loggedIn = this.authenticationService.login().isPresent();
+        if (loggedIn) {
+            this.ioService.println("Welcome " + this.authenticationService.getCurrentPlayer().get().getAccountName());
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void createAccount() {
@@ -159,10 +179,14 @@ public class GameController {
             }
         } while (run);
 
-        this.ioService.println("Good job!\n" +
+        this.ioService.println("\nGood job!\n" +
                 "This challenge score was: " + score);
 
         this.updateScore(score);
+    }
+
+    private void logout() {
+        this.authenticationService.logout();
     }
 
     private void quit() {
@@ -171,20 +195,28 @@ public class GameController {
     }
 
     private void updateScore(double score) {
-        this.ioService.print("\nUpdating score... ");
-
         Optional<Player> player = this.authenticationService.getCurrentPlayer();
+
         if (player.isPresent()) {
             Player playerToUpdate = player.get();
-            this.playerService.updateScore(playerToUpdate, score);
+            this.ioService.print("\nUpdating score... ");
+            if (this.playerService.updateScore(playerToUpdate, score)) {
+                ceaseExecution();
+                if (this.playerService.levelUp(playerToUpdate)) {
+                    this.ioService.print("Congratulations! You've leveled up! You are now level " + playerToUpdate.getLevel() + "! ");
+                }
+                this.ioService.println("Done!");
+            } else {
+                this.ioService.println("Nothing to update!");
+            }
         }
+    }
 
+    private void ceaseExecution() {
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        this.ioService.println("Done!");
     }
 }

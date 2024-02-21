@@ -46,11 +46,12 @@ public class GameEngine implements GameService {
                 "Time spent: " + this.challenge.getDuration() + "\n" +
                 "Press enter to continue...");
 
-        return calculateScore(userInput, correctInput);
+        return calculateScore(userInput, correctInput, this.challenge.getGenerator().getDifficulty());
     }
 
-    private double calculateScore(String userInput, String correctInput) {
+    private double calculateScore(String userInput, String correctInput, String difficulty) {
         double score = (getNumOfCorrectChars(userInput, correctInput) * 10) / getChallengeDuration();
+        score = score * Integer.parseInt(difficulty);
         return Math.floor(score * 100) / 100;
     }
 

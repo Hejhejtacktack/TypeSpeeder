@@ -11,5 +11,6 @@ public interface AuthenticationService {
     boolean authenticate(String givenUsername, String givenPassword) throws AuthenticationException;
     void validate(String string) throws ValidationException;
     Optional<Player> login();
+    void logout();
     void isLoggedIn() throws AuthenticationException;
 }

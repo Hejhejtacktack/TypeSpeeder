@@ -20,7 +20,7 @@ public class MenuPerformanceTest {
     public void testGetMenuOptionsExecutionTime() {
         long startTime = System.nanoTime();
         Menu menu = new Menu();
-        menu.getMenuOptions();
+        menu.getMenuOptions(menu.startMenu());
         long endTime = System.nanoTime();
 
         long duration = (endTime - startTime) / MILLISECONDS_CONVERSION;
@@ -40,7 +40,7 @@ public class MenuPerformanceTest {
         long startTime = System.nanoTime();
 
         Menu menu = new Menu();
-        menu.displayMenu();
+        menu.displayMenu(menu.getMenuOptions(menu.mainMenu()));
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime) / MILLISECONDS_CONVERSION;

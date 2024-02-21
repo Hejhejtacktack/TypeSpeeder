@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.List;
 import org.mockito.Mockito;
 import se.ju23.typespeeder.service.Menu;
@@ -79,21 +80,26 @@ public class MenuTest {
     @Test
     public void testDisplayMenuCallsGetMenuOptionsAndReturnsAtLeastFive() {
         Menu menuMock = Mockito.spy(new Menu());
-        menuMock.displayMenu();
-        verify(menuMock, times(1)).getMenuOptions();
-        assertTrue(menuMock.getMenuOptions().size() >= 5, "'getMenuOptions()' should return at least 5 alternatives.");
+        doReturn(Arrays.asList("Option 1", "Option 2", "Option 3", "Option 4", "Option 5")).when(menuMock).getMenuOptions(Mockito.anyString());
+
+        menuMock.displayMenu(menuMock.getMenuOptions(Mockito.anyString()));
+        verify(menuMock, times(1)).getMenuOptions(Mockito.anyString());
+        assertTrue(menuMock.getMenuOptions(Mockito.anyString()).size() >= 5, "'getMenuOptions()' should return at least 5 alternatives.");
     }
 
     @Test
     public void menuShouldHaveAtLeastFiveOptions() {
         Menu menu = new Menu();
-        List<String> options = menu.getMenuOptions();
+        List<String> options = menu.getMenuOptions(menu.mainMenu());
         assertTrue(options.size() >= 5, "The menu should contain at least 5 alternatives.");
+        List<String> options2 = menu.getMenuOptions(menu.startMenu());
+        assertTrue(options2.size() >= 5, "The menu should contain at least 5 alternatives.");
     }
 
     @Test
     public void menuShouldPrintAtLeastFiveOptions() {
-        new Menu().displayMenu();
+        Menu menu = new Menu();
+        menu.displayMenu(menu.getMenuOptions(menu.startMenu()));
         long count = outContent.toString().lines().count();
         assertTrue(count >= 5, "The menu should print out at least 5 alternatives.");
     }
@@ -107,7 +113,7 @@ public class MenuTest {
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         Menu menu = new Menu();
-        menu.displayMenu();
+        menu.displayMenu(menu.getMenuOptions(menu.startMenu()));
 
         String consoleOutput = outContent.toString();
         assertTrue(consoleOutput.contains("Välj språk (svenska/engelska):"), "Menu should prompt for language selection.");

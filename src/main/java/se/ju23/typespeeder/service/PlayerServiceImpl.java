@@ -65,10 +65,13 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public boolean updateScore(Player player, double score) {
-        player.setScore(score);
-        this.playerRepository.save(player);
-
-        return true;
+        if (score > 0) {
+            player.setScore(player.getScore() + score);
+            this.playerRepository.save(player);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -78,7 +81,7 @@ public class PlayerServiceImpl implements PlayerService {
         double playerScore = player.getScore();
 
         if (playerScore >= threshold) {
-            player.setLevel(+1);
+            player.setLevel(playerLevel + 1);
             this.playerRepository.save(player);
             return true;
         } else {

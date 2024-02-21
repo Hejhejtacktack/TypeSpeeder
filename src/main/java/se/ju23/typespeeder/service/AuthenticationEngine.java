@@ -86,9 +86,14 @@ public class AuthenticationEngine implements AuthenticationService {
                 return player;
             }
         } catch (AuthenticationException aE) {
-            this.ioService.println(aE);
+            this.ioService.println("Login failed: " + aE);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void logout() {
+        this.currentPlayer = Optional.empty();
     }
 
     @Override
@@ -96,9 +101,5 @@ public class AuthenticationEngine implements AuthenticationService {
         if (this.currentPlayer.isEmpty()) {
             throw new AuthenticationException("Please login first");
         }
-    }
-
-    public void logout() {
-        this.currentPlayer = Optional.empty();
     }
 }

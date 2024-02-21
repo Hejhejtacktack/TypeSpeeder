@@ -11,14 +11,10 @@ import java.time.LocalDateTime;
 
 public class Challenge {
 
-    Generator generator;
-//    private SentenceGenerator sentenceGenerator;
-//    private CharacterGenerator characterGenerator;
-//    private SymbolGenerator symbolGenerator;
+    private Generator<?> generator;
     private String correctInput;
     private double duration;
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
 
     public Challenge(String mode, String difficulty) throws ChallengeException {
         switch (mode) {
@@ -30,6 +26,10 @@ public class Challenge {
     }
 
     public Challenge() {
+    }
+
+    public Generator<?> getGenerator() {
+        return this.generator;
     }
 
     public String getCorrectInput() {
@@ -52,8 +52,8 @@ public class Challenge {
     }
 
     public void endChallenge() {
-        this.endTime = LocalDateTime.now();
-        this.duration = Duration.between(this.startTime, this.endTime).toMillis() / 1000.0;
+        LocalDateTime endTime = LocalDateTime.now();
+        this.duration = Duration.between(this.startTime, endTime).toMillis() / 1000.0;
     }
 
     public String lettersToType() {

@@ -22,6 +22,11 @@ public class SentenceGenerator implements Generator<String> {
     }
 
     @Override
+    public String getDifficulty() {
+        return this.difficulty;
+    }
+
+    @Override
     public String generate() {
         StringBuilder sentence = new StringBuilder();
 

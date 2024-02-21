@@ -15,6 +15,11 @@ public class SymbolGenerator implements Generator<Character> {
     }
 
     @Override
+    public String getDifficulty() {
+        return this.difficulty;
+    }
+
+    @Override
     public String generate() {
         int counter = 0;
         StringBuilder stringBuilder = new StringBuilder();
