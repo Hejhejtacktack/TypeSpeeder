@@ -16,6 +16,8 @@ import java.util.Optional;
 @Component
 public class GameController {
 
+    // TODO more points on harder difficulty
+
     private GameService gameService;
     private IOService ioService;
     private MenuService menuService;
@@ -171,8 +173,11 @@ public class GameController {
     private void updateScore(double score) {
         this.ioService.print("\nUpdating score... ");
 
-        // TODO replace with actual
-        this.ioService.println(score);
+        Optional<Player> player = this.authenticationService.getCurrentPlayer();
+        if (player.isPresent()) {
+            Player playerToUpdate = player.get();
+            this.playerService.updateScore(playerToUpdate, score);
+        }
 
         try {
             Thread.sleep(1500);

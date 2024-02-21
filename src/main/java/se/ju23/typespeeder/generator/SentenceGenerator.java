@@ -5,7 +5,7 @@ import se.ju23.typespeeder.exception.ChallengeException;
 import java.util.List;
 import java.util.Random;
 
-public class SentenceGenerator implements Generator {
+public class SentenceGenerator implements Generator<String> {
 
     String difficulty;
     List<String> subjects = List.of("A cat", "A dog", "A bear", "A sheep", "A squirrel", "A lion", "An elephant");
@@ -51,7 +51,8 @@ public class SentenceGenerator implements Generator {
         }
     }
 
-    private String getRandomElement(List<String> list) {
+    @Override
+    public String getRandomElement(List<String> list) {
         Random random = new Random();
         int index = random.nextInt(list.size());
         return list.get(index);

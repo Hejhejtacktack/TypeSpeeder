@@ -27,7 +27,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (player.isPresent()) {
             currentPlayer = player.get();
         } else {
-            throw new AuthenticationException("Error: Please login first.");
+            throw new AuthenticationException("Please login first.");
         }
 
         String choice = UIEngine.promptForInput("""
@@ -61,5 +61,28 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public boolean changePassword(Player player, String newPassword) {
         return false;
+    }
+
+    @Override
+    public boolean updateScore(Player player, double score) {
+        player.setScore(score);
+        this.playerRepository.save(player);
+
+        return true;
+    }
+
+    @Override
+    public boolean levelUp(Player player) {
+        int playerLevel = player.getLevel();
+        int threshold = playerLevel * 75;
+        double playerScore = player.getScore();
+
+        if (playerScore >= threshold) {
+            player.setLevel(+1);
+            this.playerRepository.save(player);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

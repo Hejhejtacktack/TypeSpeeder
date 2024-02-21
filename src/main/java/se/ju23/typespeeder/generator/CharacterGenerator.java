@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class CharacterGenerator implements Generator {
+public class CharacterGenerator implements Generator<Character> {
 
     String difficulty;
     List<Character> characters;
@@ -17,7 +17,8 @@ public class CharacterGenerator implements Generator {
         } else {
             throw new ChallengeException("Difficulty must be Easy, Medium or Hard");
         }
-        this.characters = populateList();
+        this.characters = new ArrayList<>();
+        populateList();
     }
 
     @Override
@@ -38,9 +39,14 @@ public class CharacterGenerator implements Generator {
         return stringBuilder.toString();
     }
 
-    private List<Character> populateList() {
-        List<Character> characters = new ArrayList<>();
+    @Override
+    public Character getRandomElement(List<Character> list) {
+        Random random = new Random();
+        int index = random.nextInt(list.size());
+        return list.get(index);
+    }
 
+    private void populateList() {
         for (char character = 'a'; character <= 'z'; character++) {
             characters.add(character);
         }
@@ -48,13 +54,5 @@ public class CharacterGenerator implements Generator {
         for (char character = 'A'; character <= 'Z'; character++) {
             characters.add(character);
         }
-
-        return characters;
-    }
-
-    private Character getRandomElement(List<Character> list) {
-        Random random = new Random();
-        int index = random.nextInt(list.size());
-        return list.get(index);
     }
 }
