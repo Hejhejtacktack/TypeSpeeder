@@ -59,23 +59,44 @@ public class GameController {
                 case "0" -> this.quit();
                 default -> this.ioService.println("Error: Please enter a menu option");
             }
-        } while (!loggedIn);
 
-        do {
-            this.ioService.println("\n\tMain menu");
-            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
-            String choice = this.uiService.promptForInput("> ");
+            while (loggedIn) {
+                this.ioService.println("\n\tMain menu");
+                this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
+                choice = this.uiService.promptForInput("> ");
 
-            switch (choice) {
-                case "7" -> this.play();
-                case "4" -> this.displayLeaderboard();
-                case "3" -> this.changePlayerInfo();
-                case "5" -> this.displayNewsLetter();
-                // TODO logout
-                case "0" -> this.logout();
-                default -> this.ioService.println("Error: Please enter a menu option");
+                switch (choice) {
+                    case "1" -> this.play();
+                    case "2" -> this.displayLeaderboard();
+                    case "3" -> this.changePlayerInfo();
+                    case "4" -> this.displayNewsLetter();
+                    case "0" -> {
+                        this.logout();
+                        loggedIn = false;
+                    }
+                    default -> this.ioService.println("Error: Please enter a menu option");
+                }
             }
         } while (run);
+
+//        do {
+//            this.ioService.println("\n\tMain menu");
+//            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
+//            String choice = this.uiService.promptForInput("> ");
+//
+//            switch (choice) {
+//                case "1" -> this.play();
+//                case "2" -> this.displayLeaderboard();
+//                case "3" -> this.changePlayerInfo();
+//                case "4" -> this.displayNewsLetter();
+//                case "0" -> {
+//                    this.logout();
+//                    loggedIn = false;
+//                    run = false;
+//                }
+//                default -> this.ioService.println("Error: Please enter a menu option");
+//            }
+//        } while (run);
     }
 
     private void initialize() {
