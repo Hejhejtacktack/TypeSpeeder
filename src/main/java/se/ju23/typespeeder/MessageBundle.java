@@ -8,10 +8,14 @@ public class MessageBundle {
     private final ResourceBundle bundle;
 
     public MessageBundle(Locale locale) {
-        this.bundle = ResourceBundle.getBundle(BASE_NAME, locale);
+        this.bundle = ResourceBundle.getBundle(BASE_NAME, locale, getClass().getClassLoader());
     }
 
     public String getMessage(String key, Object... args) {
         return String.format(bundle.getString(key), args);
+    }
+
+    public Locale getCurrentLocale() {
+        return this.bundle.getLocale();
     }
 }

@@ -1,6 +1,8 @@
 package se.ju23.typespeeder.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ju23.typespeeder.MessageBundle;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,15 +10,14 @@ import java.util.List;
 @Service
 public class Menu implements MenuService {
 
-    // TODO
+    MessageBundle messageBundle;
 
-    private String TEXT_COLOR;
-
-    public Menu() {
+    @Autowired
+    public Menu(MessageBundle messageBundle) {
+        this.messageBundle = messageBundle;
     }
 
-    public Menu(String TEXT_COLOR) {
-        this.TEXT_COLOR = TEXT_COLOR;
+    public Menu() {
     }
 
     @Override
@@ -33,22 +34,12 @@ public class Menu implements MenuService {
 
     @Override
     public String startMenu() {
-        return """
-                1. Login
-                2. Create account
-                3. Change language (swedish/english)
-                4. News
-                0. Quit""";
+        return this.messageBundle.getMessage("menu.startMenu");
     }
 
     @Override
     public String mainMenu() {
-        return """
-                1. Play
-                2. View leaderboard
-                3. Change account information
-                4. Patch notes
-                0. Logout""";
+        return this.messageBundle.getMessage("menu.mainMenu");
     }
 
     private List<String> makeList(String menu) {

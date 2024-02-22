@@ -2,6 +2,7 @@ package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.AccountCreationException;
 import se.ju23.typespeeder.exception.ValidationException;
 import se.ju23.typespeeder.model.Player;
@@ -16,26 +17,22 @@ public class AccountEngine implements AccountService {
     UsernameRepository usernameRepo;
     UIService uiService;
     AuthenticationService authenticationService;
+    MessageBundle messageBundle;
 
     @Autowired
-    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, AuthenticationService authenticationService) {
+    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, AuthenticationService authenticationService, MessageBundle messageBundle) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
         this.authenticationService = authenticationService;
+        this.messageBundle = messageBundle;
     }
 
     @Override
     public void build() throws AccountCreationException {
-        String desiredAccountName = this.uiService.promptForInput("""
-                Enter desired account name
-                >\s""");
-        String desiredUsername = this.uiService.promptForInput("""
-                Enter desired username
-                >\s""");
-        String desiredPassword = this.uiService.promptForInput("""
-                Enter desired password
-                >\s""");
+        String desiredAccountName = this.uiService.promptForInput(this.messageBundle.getMessage("account.accountNamePrompt") + "\n> ");
+        String desiredUsername = this.uiService.promptForInput(this.messageBundle.getMessage("account.usernamePrompt") + "\n> ");
+        String desiredPassword = this.uiService.promptForInput(this.messageBundle.getMessage("account.passwordPrompt") + "\n> ");
 
         this.create(desiredAccountName, desiredUsername, desiredPassword);
     }

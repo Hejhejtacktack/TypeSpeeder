@@ -1,7 +1,7 @@
 package se.ju23.typespeeder.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.ju23.typespeeder.Language;
 import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
@@ -28,8 +28,10 @@ public class GameController {
     private LeaderBoardService leaderBoardService;
     private NewsLetterService newsLetterService;
     private MessageBundle messageBundle;
+    private LocaleServiceImpl localeService;
 
-    public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService) {
+    @Autowired
+    public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService, MessageBundle messageBundle, LocaleServiceImpl localeService) {
         this.gameService = gameService;
         this.ioService = ioService;
         this.menuService = menuService;
@@ -39,12 +41,8 @@ public class GameController {
         this.accountService = accountService;
         this.leaderBoardService = leaderBoardService;
         this.newsLetterService = newsLetterService;
-        Locale locale = new Locale("en");
-        this.messageBundle = new MessageBundle(locale);
-    }
-
-    public MessageBundle getMessageBundle() {
-        return messageBundle;
+        this.messageBundle = messageBundle;
+        this.localeService = localeService;
     }
 
     public void run(){
@@ -55,8 +53,8 @@ public class GameController {
 
         do {
             this.ioService.println(this.messageBundle.getMessage("menu.startHeader"));
-            this.menuService.displayMenu(this.menuService.getMenuOptions(this.messageBundle.getMessage("menu.startMenu")));
-            String choice = this.uiService.promptForInput(this.messageBundle.getMessage("menu.prompt"));
+            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.startMenu()));
+            String choice = this.uiService.promptForInput("> ");
 
             switch (choice) {
                 case "1" -> loggedIn = this.login();
@@ -69,8 +67,8 @@ public class GameController {
 
             while (loggedIn) {
                 this.ioService.println(this.messageBundle.getMessage("menu.mainHeader"));
-                this.menuService.displayMenu(this.menuService.getMenuOptions(this.messageBundle.getMessage("menu.mainMenu")));
-                choice = choice = this.uiService.promptForInput(this.messageBundle.getMessage("menu.prompt"));
+                this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
+                choice = choice = this.uiService.promptForInput("> ");
 
                 switch (choice) {
                     case "1" -> this.play();
@@ -88,6 +86,7 @@ public class GameController {
     }
 
     private void initialize() {
+        this.localeService.setCurrentLocale(Locale.ENGLISH);
         ioService.println(this.messageBundle.getMessage("initialize.message"));
     }
 
@@ -99,7 +98,6 @@ public class GameController {
         boolean loggedIn = this.authenticationService.login().isPresent();
         if (loggedIn) {
             String accountName = this.authenticationService.getCurrentPlayer().get().getAccountName();
-            this.ioService.println(this.messageBundle.getMessage("login.success") + accountName);
             return true;
         } else {
             return false;
@@ -113,7 +111,7 @@ public class GameController {
             this.ioService.println(aCE);
         }
 
-        this.ioService.println("\nAccount was successfully created");
+        this.ioService.println(this.messageBundle.getMessage("account.creationSuccess"));
     }
 
     private void changePlayerInfo() {
@@ -129,8 +127,11 @@ public class GameController {
         List<LeaderboardView> leaderboard = this.leaderBoardService.getLeaderboard();
 
         if (!leaderboard.isEmpty()) {
-            this.ioService.println("\n\t\tLEADERBOARD");
-            this.ioService.println(String.format("%-17s%-17s%-17s", "Account name", "Score", "Level"));
+            this.ioService.println(this.messageBundle.getMessage("leaderboard.header"));
+            this.ioService.println(String.format("%-17s%-17s%-17s",
+                    this.messageBundle.getMessage("leaderboard.accountName"),
+                    this.messageBundle.getMessage("leaderboard.score"),
+                    this.messageBundle.getMessage("leaderboard.level")));
 
             for (LeaderboardView entry : leaderboard) {
                 this.ioService.println(String.format("%-16s %-16.2f %-16d",
@@ -152,17 +153,15 @@ public class GameController {
     }
 
     private void changeLanguage() {
-        String choice = this.uiService.promptForInput("""
-                Which language do you want?
-                1. Swedish
-                2. English
-                >\s""");
+        String choice = this.uiService.promptForInput(this.messageBundle.getMessage("language.change") + "\n> ");
 
         switch (choice) {
-            case "1" -> this.messageBundle = new MessageBundle(new Locale("sv"));
-            case "2" -> this.messageBundle = new MessageBundle(new Locale("en"));
+            case "1" -> this.localeService.setCurrentLocale(new Locale("sv", "SE"));
+            case "2" -> this.localeService.setCurrentLocale(Locale.ENGLISH);
             default -> this.ioService.println(this.messageBundle.getMessage("menu.error"));
         }
+        this.ioService.println(this.messageBundle.getCurrentLocale());
+        this.ioService.println(this.messageBundle.getMessage("language.selected"));
     }
 
     private void play() {

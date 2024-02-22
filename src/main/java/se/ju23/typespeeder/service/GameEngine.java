@@ -2,6 +2,7 @@ package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.ChallengeException;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.Challenge;
@@ -10,11 +11,13 @@ import se.ju23.typespeeder.model.Challenge;
 public class GameEngine implements GameService {
 
     UIEngine uiService;
+    MessageBundle messageBundle;
     Challenge challenge;
 
     @Autowired
-    public GameEngine(UIEngine uiService) {
+    public GameEngine(UIEngine uiService, MessageBundle messageBundle) {
         this.uiService = uiService;
+        this.messageBundle = messageBundle;
     }
 
     public GameEngine() {
@@ -28,13 +31,7 @@ public class GameEngine implements GameService {
             throw new PlayException("caused by: " + cE);
         }
 
-        this.uiService.promptForInput("""
-                
-                You are to type the given characters on the screen
-                Every correct character gives points
-                The faster the better
-                Press enter to start...
-                """);
+        this.uiService.promptForInput(this.messageBundle.getMessage("game.init"));
 
         String userInput = this.uiService.promptForInput(challenge.startChallenge() + "\n> ").trim();
         this.challenge.endChallenge();
