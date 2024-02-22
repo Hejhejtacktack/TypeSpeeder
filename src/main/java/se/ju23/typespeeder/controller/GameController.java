@@ -1,6 +1,7 @@
 package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
+import se.ju23.typespeeder.Language;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
@@ -24,6 +25,7 @@ public class GameController {
     private AccountService accountService;
     private LeaderBoardService leaderBoardService;
     private NewsLetterService newsLetterService;
+    private final Language language;
 
     public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService) {
         this.gameService = gameService;
@@ -35,6 +37,7 @@ public class GameController {
         this.accountService = accountService;
         this.leaderBoardService = leaderBoardService;
         this.newsLetterService = newsLetterService;
+        this.language = Language.ENGLISH;
     }
 
     public void run(){
@@ -54,7 +57,7 @@ public class GameController {
                 case "3" -> this.changeLanguage();
                 case "4" -> this.displayNewsLetter();
                 case "0" -> this.quit();
-                default -> this.ioService.println("Error: Please enter a menu option");
+                default -> this.printErrorMessage();
             }
 
             while (loggedIn) {
@@ -71,35 +74,20 @@ public class GameController {
                         this.logout();
                         loggedIn = false;
                     }
-                    default -> this.ioService.println("Error: Please enter a menu option");
+                    default -> this.printErrorMessage();
                 }
             }
         } while (run);
-
-//        do {
-//            this.ioService.println("\n\tMain menu");
-//            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
-//            String choice = this.uiService.promptForInput("> ");
-//
-//            switch (choice) {
-//                case "1" -> this.play();
-//                case "2" -> this.displayLeaderboard();
-//                case "3" -> this.changePlayerInfo();
-//                case "4" -> this.displayNewsLetter();
-//                case "0" -> {
-//                    this.logout();
-//                    loggedIn = false;
-//                    run = false;
-//                }
-//                default -> this.ioService.println("Error: Please enter a menu option");
-//            }
-//        } while (run);
     }
 
     private void initialize() {
         ioService.println("\nSpelet går ut på att programmet ska skriva ut en text där slumpmässiga bokstäver\n" +
                 "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
                 "stor/liten bokstav och på så kort tid som möjligt.");
+    }
+
+    private void printErrorMessage() {
+        this.ioService.println("Error: Please enter a menu option");
     }
 
     private boolean login() {
@@ -158,6 +146,12 @@ public class GameController {
     }
 
     private void changeLanguage() {
+        String choice = this.uiService.promptForInput("""
+                Which language do you want?
+                1. Swedish
+                2. English
+                >\s""");
+
 
     }
 

@@ -36,7 +36,7 @@ public class Menu implements MenuService {
         return """
                 1. Login
                 2. Create account
-                3. Change language
+                3. Change language (swedish/english)
                 4. News
                 0. Quit""";
     }
