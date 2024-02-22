@@ -66,7 +66,7 @@ public class AuthenticationEngine implements AuthenticationService {
 
     @Override
     public Optional<Player> login() {
-        ioService.println("\n\tLogin");
+        ioService.println(this.);
 
         String givenUsername = this.uiService.promptForInput("""
                 Enter username

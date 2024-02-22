@@ -2,6 +2,7 @@ package se.ju23.typespeeder.controller;
 
 import org.springframework.stereotype.Component;
 import se.ju23.typespeeder.Language;
+import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
@@ -12,6 +13,7 @@ import se.ju23.typespeeder.model.Player;
 import se.ju23.typespeeder.service.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Component
@@ -25,7 +27,7 @@ public class GameController {
     private AccountService accountService;
     private LeaderBoardService leaderBoardService;
     private NewsLetterService newsLetterService;
-    private final Language language;
+    private MessageBundle messageBundle;
 
     public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService) {
         this.gameService = gameService;
@@ -37,7 +39,12 @@ public class GameController {
         this.accountService = accountService;
         this.leaderBoardService = leaderBoardService;
         this.newsLetterService = newsLetterService;
-        this.language = Language.ENGLISH;
+        Locale locale = new Locale("en");
+        this.messageBundle = new MessageBundle(locale);
+    }
+
+    public MessageBundle getMessageBundle() {
+        return messageBundle;
     }
 
     public void run(){
@@ -47,9 +54,9 @@ public class GameController {
         initialize();
 
         do {
-            this.ioService.println("\n\tStart menu");
-            this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.startMenu()));
-            String choice = this.uiService.promptForInput("> ");
+            this.ioService.println(this.messageBundle.getMessage("menu.startHeader"));
+            this.menuService.displayMenu(this.menuService.getMenuOptions(this.messageBundle.getMessage("menu.startMenu")));
+            String choice = this.uiService.promptForInput(this.messageBundle.getMessage("menu.prompt"));
 
             switch (choice) {
                 case "1" -> loggedIn = this.login();
@@ -61,9 +68,9 @@ public class GameController {
             }
 
             while (loggedIn) {
-                this.ioService.println("\n\tMain menu");
-                this.menuService.displayMenu(this.menuService.getMenuOptions(this.menuService.mainMenu()));
-                choice = this.uiService.promptForInput("> ");
+                this.ioService.println(this.messageBundle.getMessage("menu.mainHeader"));
+                this.menuService.displayMenu(this.menuService.getMenuOptions(this.messageBundle.getMessage("menu.mainMenu")));
+                choice = choice = this.uiService.promptForInput(this.messageBundle.getMessage("menu.prompt"));
 
                 switch (choice) {
                     case "1" -> this.play();
@@ -81,19 +88,18 @@ public class GameController {
     }
 
     private void initialize() {
-        ioService.println("\nSpelet går ut på att programmet ska skriva ut en text där slumpmässiga bokstäver\n" +
-                "och/eller ord markeras i en viss färg som användaren ska skriva in korrekt, rätt ordning,\n" +
-                "stor/liten bokstav och på så kort tid som möjligt.");
+        ioService.println(this.messageBundle.getMessage("initialize.message"));
     }
 
     private void printErrorMessage() {
-        this.ioService.println("Error: Please enter a menu option");
+        this.ioService.println(this.messageBundle.getMessage("menu.error"));
     }
 
     private boolean login() {
         boolean loggedIn = this.authenticationService.login().isPresent();
         if (loggedIn) {
-            this.ioService.println("Welcome " + this.authenticationService.getCurrentPlayer().get().getAccountName());
+            String accountName = this.authenticationService.getCurrentPlayer().get().getAccountName();
+            this.ioService.println(this.messageBundle.getMessage("login.success") + accountName);
             return true;
         } else {
             return false;
@@ -152,7 +158,11 @@ public class GameController {
                 2. English
                 >\s""");
 
-
+        switch (choice) {
+            case "1" -> this.messageBundle = new MessageBundle(new Locale("sv"));
+            case "2" -> this.messageBundle = new MessageBundle(new Locale("en"));
+            default -> this.ioService.println(this.messageBundle.getMessage("menu.error"));
+        }
     }
 
     private void play() {
