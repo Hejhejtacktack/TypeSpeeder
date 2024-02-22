@@ -8,10 +8,10 @@ import java.util.Random;
 public class SentenceGenerator implements Generator<String> {
 
     String difficulty;
-    List<String> subjects = List.of("A cat", "A dog", "A bear", "A sheep", "A squirrel", "A lion", "An elephant");
-    List<String> verbs = List.of("ate", "hugged", "slapped", "scared", "chased", "sat", "climbed");
+    List<String> subjects = List.of("A cat", "A dog", "Your boyfriend", "A sheep", "The baker", "A lion", "An elephant");
+    List<String> verbs = List.of("ate", "hugged", "slapped", "scared", "chased", "married", "climbed");
     List<String> objects = List.of("a car", "its owner", "a mailbox", "a can", "a policeman", "a bicycle", "the mailman");
-    List<String> adverbials = List.of("in the office", "at home", "at the park", "in harmony", "in anger", "at the supermarket", "during christmas");
+    List<String> adverbials = List.of("in the office", "at home", "at the park", "in a fountain", "in anger", "at the supermarket", "during christmas");
 
     public SentenceGenerator(String difficulty) throws ChallengeException {
         if (difficulty.matches("[1-3]")) {
@@ -45,7 +45,7 @@ public class SentenceGenerator implements Generator<String> {
                 return sentence.toString().trim();
             }
             case "2" -> {
-                return sentence.reverse().toString().trim();
+                return capitalizeRandomCharacter(sentence).trim();
             }
             case "3" -> {
                 return capitalizeRandomCharacter(sentence.reverse()).trim();

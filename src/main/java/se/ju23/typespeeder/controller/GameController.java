@@ -15,9 +15,6 @@ import java.util.Optional;
 
 @Component
 public class GameController {
-
-    // TODO more points on harder difficulty
-
     private GameService gameService;
     private IOService ioService;
     private MenuService menuService;
