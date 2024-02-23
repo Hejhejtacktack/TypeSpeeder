@@ -21,6 +21,9 @@ public class CharacterGenerator implements Generator<Character> {
         populateList();
     }
 
+    public CharacterGenerator() {
+    }
+
     @Override
     public String getDifficulty() {
         return this.difficulty;
@@ -49,6 +52,11 @@ public class CharacterGenerator implements Generator<Character> {
         Random random = new Random();
         int index = random.nextInt(list.size());
         return list.get(index);
+    }
+
+    @Override
+    public void setDifficulty(String difficulty) {
+
     }
 
     private void populateList() {

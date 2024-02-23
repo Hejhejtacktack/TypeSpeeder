@@ -18,14 +18,16 @@ public class AuthenticationEngine implements AuthenticationService {
     private UsernameRepository usernameRepo;
     private final UIService uiService;
     private final IOService ioService;
+    MessageBundle messageBundle;
     private Optional<Player> currentPlayer = Optional.empty();
 
     @Autowired
-    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, IOService ioService) {
+    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, IOService ioService, MessageBundle messageBundle) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
         this.ioService = ioService;
+        this.messageBundle = messageBundle;
     }
 
     public void setCurrentPlayer(Optional<Player> currentPlayer) {
@@ -66,15 +68,11 @@ public class AuthenticationEngine implements AuthenticationService {
 
     @Override
     public Optional<Player> login() {
-        ioService.println(this.);
+        this.ioService.println(this.messageBundle.getMessage("login.header"));
 
-        String givenUsername = this.uiService.promptForInput("""
-                Enter username
-                >\s""");
+        String givenUsername = this.uiService.promptForInput(this.messageBundle.getMessage("login.usernamePrompt") + "\n> ");
 
-        String givenPassword = this.uiService.promptForInput("""
-                Enter password
-                >\s""");
+        String givenPassword = this.uiService.promptForInput(this.messageBundle.getMessage("login.passwordPrompt") + "\n> ");
 
         try {
             boolean authenticated = authenticate(givenUsername, givenPassword);
@@ -82,11 +80,11 @@ public class AuthenticationEngine implements AuthenticationService {
                 Optional<Username> username = this.usernameRepo.findByValue(givenUsername);
                 Optional<Player> player = playerRepo.findByUsername(username.get());
                 setCurrentPlayer(player);
-                this.ioService.println("\nLogin successful");
+                this.ioService.println(this.messageBundle.getMessage("login.success") + player.get().getAccountName());
                 return player;
             }
         } catch (AuthenticationException aE) {
-            this.ioService.println("Login failed: " + aE);
+            this.ioService.println(this.messageBundle.getMessage("login.fail") + aE);
         }
         return Optional.empty();
     }

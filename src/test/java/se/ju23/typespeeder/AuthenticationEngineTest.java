@@ -25,11 +25,7 @@ class AuthenticationEngineTest {
 
     @BeforeEach
     void setUp() {
-        this.playerRepo = mock(PlayerRepository.class);
-        this.usernameRepo = mock(UsernameRepository.class);
-        this.uiService = mock(UIService.class);
-        this.ioService = mock(IOService.class);
-        this.authenticationEngine = new AuthenticationEngine(playerRepo, usernameRepo, uiService, ioService);
+
     }
 
     @Test

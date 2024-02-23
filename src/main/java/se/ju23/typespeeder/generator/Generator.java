@@ -6,4 +6,5 @@ public interface Generator<T> {
     String getDifficulty();
     String generate();
     T getRandomElement(List<T> list);
+    void setDifficulty(String difficulty);
 }

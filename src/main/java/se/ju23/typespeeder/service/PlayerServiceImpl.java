@@ -1,6 +1,5 @@
 package se.ju23.typespeeder.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.exception.AuthenticationException;
 import se.ju23.typespeeder.model.Player;
@@ -12,12 +11,13 @@ import java.util.Optional;
 public class PlayerServiceImpl implements PlayerService {
 
     PlayerRepository playerRepository;
-    UIService UIEngine;
+    UIService uiService;
+    MessageBundle messageBundle;
 
-    @Autowired
-    public PlayerServiceImpl(PlayerRepository playerRepository, UIService UIEngine) {
+    public PlayerServiceImpl(PlayerRepository playerRepository, UIService uiService, MessageBundle messageBundle) {
         this.playerRepository = playerRepository;
-        this.UIEngine = UIEngine;
+        this.uiService = uiService;
+        this.messageBundle = messageBundle;
     }
 
     @Override
@@ -30,20 +30,12 @@ public class PlayerServiceImpl implements PlayerService {
             throw new AuthenticationException("Please login first.");
         }
 
-        String choice = UIEngine.promptForInput("""
-                
-                What do you want to do?
-                1. Change Account name
-                2. Change Username
-                3. Change password
-                0. Back
-                Your choice
-                >\s""");
+        String choice = this.uiService.promptForInput(this.messageBundle.getMessage("player.changeMenu") + "\n> ");
 
         switch (choice) {
-            case "1" -> changeAccountName(currentPlayer, "hej");
-            case "2" -> changeUsername(currentPlayer, "hej");
-            case "3" -> changePassword(currentPlayer, "hej");
+            case "1" -> changeAccountName(currentPlayer, this.uiService.promptForInput(this.messageBundle.getMessage("player.newAccountName") + "\n> "));
+            case "2" -> changeUsername(currentPlayer, this.uiService.promptForInput(this.messageBundle.getMessage("player.newUsername") + "\n> "));
+            case "3" -> changePassword(currentPlayer, this.uiService.promptForInput(this.messageBundle.getMessage("player.newPassword") + "\n> "));
             case "0" -> {}
         }
     }
