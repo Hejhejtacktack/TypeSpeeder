@@ -19,6 +19,10 @@ public class Menu implements MenuService {
     public Menu() {
     }
 
+    public void setMessageBundle(MessageBundle messageBundle) {
+        this.messageBundle = messageBundle;
+    }
+
     @Override
     public void displayMenu(List<String> menuOptions) {
         for (String string : menuOptions) {
