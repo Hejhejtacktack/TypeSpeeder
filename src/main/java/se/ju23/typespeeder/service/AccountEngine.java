@@ -2,7 +2,6 @@ package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.AccountCreationException;
 import se.ju23.typespeeder.exception.ValidationException;
 import se.ju23.typespeeder.model.Player;

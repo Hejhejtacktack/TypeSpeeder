@@ -14,6 +14,9 @@ public class SymbolGenerator implements Generator<Character> {
         populateList();
     }
 
+    public SymbolGenerator() {
+    }
+
     @Override
     public String getDifficulty() {
         return this.difficulty;
@@ -42,6 +45,11 @@ public class SymbolGenerator implements Generator<Character> {
         Random random = new Random();
         int index = random.nextInt(list.size());
         return list.get(index);
+    }
+
+    @Override
+    public void setDifficulty(String difficulty) {
+
     }
 
 

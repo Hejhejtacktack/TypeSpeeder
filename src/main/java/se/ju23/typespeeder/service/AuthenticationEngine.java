@@ -1,9 +1,7 @@
 package se.ju23.typespeeder.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import se.ju23.typespeeder.MessageBundle;
 import se.ju23.typespeeder.exception.AuthenticationException;
 import se.ju23.typespeeder.exception.ValidationException;
 import se.ju23.typespeeder.model.Player;
@@ -11,7 +9,6 @@ import se.ju23.typespeeder.model.Username;
 import se.ju23.typespeeder.repository.PlayerRepository;
 import se.ju23.typespeeder.repository.UsernameRepository;
 
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

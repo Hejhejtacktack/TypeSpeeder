@@ -1,10 +1,14 @@
 package se.ju23.typespeeder.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import se.ju23.typespeeder.exception.ChallengeException;
 import se.ju23.typespeeder.generator.CharacterGenerator;
 import se.ju23.typespeeder.generator.Generator;
 import se.ju23.typespeeder.generator.SentenceGenerator;
 import se.ju23.typespeeder.generator.SymbolGenerator;
+import se.ju23.typespeeder.service.MessageBundle;
+import se.ju23.typespeeder.service.WordProvider;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -26,6 +30,11 @@ public class Challenge {
     }
 
     public Challenge() {
+        try {
+            this.generator = new SentenceGenerator("1");
+        } catch (ChallengeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Generator<?> getGenerator() {

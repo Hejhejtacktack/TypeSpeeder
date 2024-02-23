@@ -2,7 +2,7 @@ package se.ju23.typespeeder.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import se.ju23.typespeeder.MessageBundle;
+import se.ju23.typespeeder.service.MessageBundle;
 import se.ju23.typespeeder.exception.PlayException;
 import se.ju23.typespeeder.model.NewsLetter;
 import se.ju23.typespeeder.exception.AccountCreationException;
@@ -31,7 +31,17 @@ public class GameController {
     private LocaleServiceImpl localeService;
 
     @Autowired
-    public GameController(GameService gameService, IOService ioService, MenuService menuService, AuthenticationService authenticationService, PlayerService playerService, UIService uiService, AccountService accountService, LeaderBoardService leaderBoardService, NewsLetterService newsLetterService, MessageBundle messageBundle, LocaleServiceImpl localeService) {
+    public GameController(GameService gameService,
+                          IOService ioService,
+                          MenuService menuService,
+                          AuthenticationService authenticationService,
+                          PlayerService playerService,
+                          UIService uiService,
+                          AccountService accountService,
+                          LeaderBoardService leaderBoardService,
+                          NewsLetterService newsLetterService,
+                          MessageBundle messageBundle,
+                          LocaleServiceImpl localeService) {
         this.gameService = gameService;
         this.ioService = ioService;
         this.menuService = menuService;
@@ -160,7 +170,7 @@ public class GameController {
             case "2" -> this.localeService.setCurrentLocale(Locale.ENGLISH);
             default -> this.ioService.println(this.messageBundle.getMessage("menu.error"));
         }
-        this.ioService.println(this.messageBundle.getCurrentLocale());
+        this.ioService.println(this.localeService.getCurrentLocale());
         this.ioService.println(this.messageBundle.getMessage("language.selected"));
     }
 

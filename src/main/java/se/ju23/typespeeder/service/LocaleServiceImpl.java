@@ -9,6 +9,12 @@ import java.util.Locale;
 public class LocaleServiceImpl {
 
     private Locale currentLocale = Locale.ENGLISH;
+    private final MessageBundle messageBundle;
+
+    @Autowired
+    public LocaleServiceImpl(MessageBundle messageBundle) {
+        this.messageBundle = messageBundle;
+    }
 
     public Locale getCurrentLocale() {
         return currentLocale;
@@ -16,5 +22,6 @@ public class LocaleServiceImpl {
 
     public void setCurrentLocale(Locale currentLocale) {
         this.currentLocale = currentLocale;
+        this.messageBundle.updateLocale(currentLocale);
     }
 }

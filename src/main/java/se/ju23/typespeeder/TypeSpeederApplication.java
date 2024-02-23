@@ -13,7 +13,7 @@ import se.ju23.typespeeder.service.*;
 import java.util.Locale;
 import java.util.Scanner;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "se.ju23.typespeeder")
 public class TypeSpeederApplication implements CommandLineRunner {
 
     @Autowired
