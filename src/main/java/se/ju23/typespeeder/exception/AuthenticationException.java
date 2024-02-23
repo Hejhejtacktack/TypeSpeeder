@@ -1,6 +1,6 @@
 package se.ju23.typespeeder.exception;
 
-public class AuthenticationException extends NullPointerException {
+public class AuthenticationException extends Exception {
     public AuthenticationException() {
     }
 

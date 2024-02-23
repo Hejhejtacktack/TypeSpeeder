@@ -28,6 +28,7 @@ public class Player {
     public Player(String accountName, Username username, String password) throws ValidationException {
         validate(accountName);
         validate(username.getValue());
+        validate(password);
         this.accountName = accountName;
         this.username = username;
         this.password = password;
@@ -39,17 +40,47 @@ public class Player {
         return accountName;
     }
 
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     public Username getUsername() {
         return username;
+    }
+
+    public void setUsername(Username username) {
+        this.username = username;
     }
 
     public String getPassword() {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     private void validate(String input) throws ValidationException {
-        if (input == null || input.isEmpty() || !input.matches("[a-zA-z-1-9]+")) {
-            throw new ValidationException("Error: in Player creation.");
+        if (input == null || input.isEmpty()) {
+            throw new ValidationException("Input cannot be empty");
+        } else if (!input.matches("[a-zA-z-1-9]+")) {
+            throw new ValidationException("Input must be characters or digits");
         }
     }
 

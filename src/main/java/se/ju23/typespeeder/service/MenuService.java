@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface MenuService {
-    void displayMenu();
-    List<String> getMenuOptions();
+    void displayMenu(List<String> menuOptions);
+    List<String> getMenuOptions(String menu);
+    String startMenu();
+    String mainMenu();
 }

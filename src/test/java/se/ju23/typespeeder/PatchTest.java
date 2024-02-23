@@ -16,7 +16,7 @@ public class PatchTest {
     @Test
     public void testPatchClassExists() {
         try {
-            Class.forName("Patch");
+            Class.forName("se.ju23.typespeeder.model.Patch");
         } catch (ClassNotFoundException e) {
             throw new AssertionError("Patch class should exist.", e);
         }
@@ -25,7 +25,7 @@ public class PatchTest {
     @Test
     public void testPatchProperties() {
         try {
-            Class<?> someClass = Class.forName("Patch");
+            Class<?> someClass = Class.forName("se.ju23.typespeeder.model.Patch");
 
             Field patchVersion = someClass.getDeclaredField("patchVersion");
             assertNotNull(patchVersion, "Field 'patchVersion' should exist in the Patch class.");
@@ -41,7 +41,8 @@ public class PatchTest {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String formattedDateTime = dateTimeValue.format(formatter);
-            assertEquals("Expected format", formattedDateTime, "'realeaseDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
+//            assertEquals("Expected format", formattedDateTime, "'realeaseDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
+            assertTrue(formattedDateTime.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
 
             Method getterMethod = someClass.getDeclaredMethod("getRealeaseDateTime");
             assertNotNull(getterMethod, "Getter method for field 'realeaseDateTime' should exist.");

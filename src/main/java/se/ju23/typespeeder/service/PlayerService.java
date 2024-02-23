@@ -10,4 +10,6 @@ public interface PlayerService {
     boolean changeAccountName(Player player, String newAccountName);
     boolean changeUsername(Player player, String newUsername);
     boolean changePassword(Player player, String newPassword);
+    boolean updateScore(Player player, double score);
+    boolean levelUp(Player player);
 }

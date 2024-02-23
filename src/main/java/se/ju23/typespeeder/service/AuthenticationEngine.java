@@ -3,6 +3,7 @@ package se.ju23.typespeeder.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.ju23.typespeeder.exception.AuthenticationException;
+import se.ju23.typespeeder.exception.ValidationException;
 import se.ju23.typespeeder.model.Player;
 import se.ju23.typespeeder.model.Username;
 import se.ju23.typespeeder.repository.PlayerRepository;
@@ -15,16 +16,26 @@ public class AuthenticationEngine implements AuthenticationService {
 
     private PlayerRepository playerRepo;
     private UsernameRepository usernameRepo;
-    private final UIEngine uiService;
-
+    private final UIService uiService;
     private final IOService ioService;
+    MessageBundle messageBundle;
+    private Optional<Player> currentPlayer = Optional.empty();
 
     @Autowired
-    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIEngine uiService, IOService ioService) {
+    public AuthenticationEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, IOService ioService, MessageBundle messageBundle) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
         this.ioService = ioService;
+        this.messageBundle = messageBundle;
+    }
+
+    public void setCurrentPlayer(Optional<Player> currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Optional<Player> getCurrentPlayer() {
+        return currentPlayer;
     }
 
     /**
@@ -49,26 +60,44 @@ public class AuthenticationEngine implements AuthenticationService {
     }
 
     @Override
+    public void validate(String string) throws ValidationException {
+        if (usernameRepo.existsByValue(string)) {
+            throw new ValidationException("Username is taken");
+        }
+    }
+
+    @Override
     public Optional<Player> login() {
-        ioService.println("\n\tLogin");
+        this.ioService.println(this.messageBundle.getMessage("login.header"));
 
-        String givenUsername = this.uiService.promptForInput("""
-                Enter username
-                >\s""");
+        String givenUsername = this.uiService.promptForInput(this.messageBundle.getMessage("login.usernamePrompt") + "\n> ");
 
-        String givenPassword = this.uiService.promptForInput("""
-                Enter password
-                >\s""");
+        String givenPassword = this.uiService.promptForInput(this.messageBundle.getMessage("login.passwordPrompt") + "\n> ");
 
         try {
             boolean authenticated = authenticate(givenUsername, givenPassword);
             if (authenticated) {
                 Optional<Username> username = this.usernameRepo.findByValue(givenUsername);
-                return playerRepo.findByUsername(username.get());
+                Optional<Player> player = playerRepo.findByUsername(username.get());
+                setCurrentPlayer(player);
+                this.ioService.println(this.messageBundle.getMessage("login.success") + player.get().getAccountName());
+                return player;
             }
-        } catch (AuthenticationException e) {
-            // TODO handle
+        } catch (AuthenticationException aE) {
+            this.ioService.println(this.messageBundle.getMessage("login.fail") + aE);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void logout() {
+        this.currentPlayer = Optional.empty();
+    }
+
+    @Override
+    public void isLoggedIn() throws AuthenticationException {
+        if (this.currentPlayer.isEmpty()) {
+            throw new AuthenticationException("Please login first");
+        }
     }
 }

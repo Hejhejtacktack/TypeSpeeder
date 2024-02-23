@@ -15,55 +15,48 @@ public class AccountEngine implements AccountService {
     PlayerRepository playerRepo;
     UsernameRepository usernameRepo;
     UIService uiService;
+    AuthenticationService authenticationService;
+    MessageBundle messageBundle;
 
     @Autowired
-    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService) {
+    public AccountEngine(PlayerRepository playerRepo, UsernameRepository usernameRepo, UIService uiService, AuthenticationService authenticationService, MessageBundle messageBundle) {
         this.playerRepo = playerRepo;
         this.usernameRepo = usernameRepo;
         this.uiService = uiService;
+        this.authenticationService = authenticationService;
+        this.messageBundle = messageBundle;
     }
 
     @Override
     public void build() throws AccountCreationException {
-        String desiredAccountName = this.uiService.promptForInput("""
-                Enter desired account name
-                >\s""");
-        String desiredUsername = this.uiService.promptForInput("""
-                Enter desired username
-                >\s""");
-        String desiredPassword = this.uiService.promptForInput("""
-                Enter desired password
-                >\s""");
+        String desiredAccountName = this.uiService.promptForInput(this.messageBundle.getMessage("account.accountNamePrompt") + "\n> ");
+        String desiredUsername = this.uiService.promptForInput(this.messageBundle.getMessage("account.usernamePrompt") + "\n> ");
+        String desiredPassword = this.uiService.promptForInput(this.messageBundle.getMessage("account.passwordPrompt") + "\n> ");
 
         this.create(desiredAccountName, desiredUsername, desiredPassword);
     }
 
     @Override
     public void create(String desiredAccountName, String desiredUsername, String desiredPassword) throws AccountCreationException {
-        // Validate input parameters, e.g., check for empty or null values
-
-        // Check if the username is already taken
-        if (usernameRepo.existsByValue(desiredUsername)) {
-            throw new AccountCreationException("Error: Username is already taken.");
+        try {
+            this.authenticationService.validate(desiredUsername);
+        } catch (ValidationException e) {
+            throw new AccountCreationException("Caused by: " + e);
         }
 
-        // Perform additional validation if needed
-
-        // Create a new player with the provided information
         Player player;
         try {
             Username username = new Username(desiredPassword);
             player = new Player(desiredAccountName, username, desiredPassword);
         } catch (ValidationException vE) {
-            throw new AccountCreationException("Error: in Account creation: " + vE);
+            throw new AccountCreationException("Caused by: " + vE);
         }
 
-        // Save the player to the database
         playerRepo.save(player);
     }
 
     @Override
     public void remove(String username) {
-
+        this.usernameRepo.deleteAll();
     }
 }

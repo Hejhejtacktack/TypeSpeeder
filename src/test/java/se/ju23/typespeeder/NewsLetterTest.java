@@ -61,6 +61,7 @@ public class NewsLetterTest {
             String formattedDateTime = dateTimeValue.format(formatter);
 //            assertEquals("Expected format", formattedDateTime, "'publishDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
             assertTrue(formattedDateTime.matches("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"));
+//            assertEquals("Expected format 'yyyy-MM-dd HH:mm:ss'", "yyyy-MM-dd HH:mm:ss", formattedDateTime);
 
             Method getterMethod = someClass.getDeclaredMethod("getPublishDateTime");
             assertNotNull(getterMethod, "Getter method for the field 'publishDateTime' should exist.");

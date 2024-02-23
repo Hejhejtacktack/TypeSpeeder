@@ -10,9 +10,10 @@ import se.ju23.typespeeder.repository.PlayerRepository;
 import se.ju23.typespeeder.repository.UsernameRepository;
 import se.ju23.typespeeder.service.*;
 
+import java.util.Locale;
 import java.util.Scanner;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "se.ju23.typespeeder")
 public class TypeSpeederApplication implements CommandLineRunner {
 
     @Autowired
@@ -29,6 +30,7 @@ public class TypeSpeederApplication implements CommandLineRunner {
 //        AuthenticationService authService = new AuthenticationEngine(ioService);
 
 //        GameController gameController = new GameController();
+
         gameController.run();
     }
 }

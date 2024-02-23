@@ -42,8 +42,10 @@ public class Username {
     }
 
     private void validate(String input) throws ValidationException {
-        if (input == null || input.isEmpty() || !input.matches("[a-zA-z-1-9]+")) {
-            throw new ValidationException("Error: in Username creation.");
+        if (input == null || input.isEmpty()) {
+            throw new ValidationException("Username cannot be blank");
+        } else if (!input.matches("[a-zA-z-1-9]+")) {
+            throw new ValidationException("Username must be characters and digits");
         }
     }
 }
