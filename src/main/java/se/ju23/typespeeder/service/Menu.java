@@ -23,6 +23,10 @@ public class Menu implements MenuService {
         this.messageBundle = messageBundle;
     }
 
+    public void displayMenu() {
+
+    }
+
     @Override
     public void displayMenu(List<String> menuOptions) {
         for (String string : menuOptions) {

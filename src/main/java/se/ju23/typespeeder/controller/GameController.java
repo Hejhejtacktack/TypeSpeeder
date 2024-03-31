@@ -119,6 +119,7 @@ public class GameController {
             this.accountService.build();
         } catch (AccountCreationException aCE) {
             this.ioService.println(aCE);
+            return;
         }
 
         this.ioService.println(this.messageBundle.getMessage("account.creationSuccess"));
